@@ -50,11 +50,3 @@ npm run build
 ```
 
 ---
-
-## 👥 Kontribusi
-
-1. Fork repository ini ke akun GitHub Anda.
-2. Buat branch baru untuk fitur atau perbaikan Anda (`git checkout -b feature/nama-fitur`).
-3. Commit perubahan Anda (`git commit -m 'feat: deskripsi perubahan'`).
-4. Push ke branch Anda (`git push origin feature/nama-fitur`).
-5. Buat **Pull Request** ke branch `main` di repositori pusat `FTI-Open-Source-Intiative-FOSI/Dinas-Internal`.
