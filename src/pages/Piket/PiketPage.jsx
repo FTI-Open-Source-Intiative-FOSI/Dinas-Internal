@@ -3,8 +3,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useApp } from '../../context/AppContext';
 import {
   ClipboardCheck, Camera, Upload, Clock, CheckCircle,
-  Check, Eye, RotateCcw, ExternalLink,
-  Calendar, Award, Search, FileText
+  Check, Eye, RotateCcw,
+  Calendar, Award, Search
 } from 'lucide-react';
 import { KETENTUAN_PIKET, getUserById, formatDate } from '../../data/mockData';
 import Modal from '../../components/ui/Modal';
@@ -21,7 +21,6 @@ export default function PiketPage() {
   const [selectedHariFilter, setSelectedHariFilter] = useState('Semua'); // 'Semua', 'Senin', ...
   const [searchQuery, setSearchQuery] = useState('');
   const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
-  const [isGformModalOpen, setIsGformModalOpen] = useState(false);
   const [selectedPhotoPreview, setSelectedPhotoPreview] = useState(null);
 
   // Waktu berjalan
@@ -212,10 +211,10 @@ export default function PiketPage() {
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-2)', alignItems: 'center' }}>
           <button
             className="btn btn-primary btn-sm"
-            onClick={() => setIsGformModalOpen(true)}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#107569' }}
+            onClick={() => setIsCameraModalOpen(true)}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
           >
-            <ExternalLink size={14} /> Absensi Digital (GFORM)
+            <Camera size={14} /> Absen Sekarang
           </button>
           <button
             className="btn btn-secondary btn-sm"
@@ -441,7 +440,7 @@ export default function PiketPage() {
                   </div>
 
                   <div style={{ fontSize: '12px', color: 'var(--gray-600)', marginTop: 6, maxWidth: 440, margin: '6px auto 0' }}>
-                    Sesuai <strong>Ketentuan Pelaksanaan Piket</strong>, setiap pengurus wajib piket minimal <strong>1 jam</strong>, mengisi absensi digital (GFORM), dan menjaga kebersihan sekretariat.
+                    Sesuai <strong>Ketentuan Pelaksanaan Piket</strong>, setiap pengurus wajib piket minimal <strong>1 jam</strong>, melakukan absensi langsung di website ini, dan menjaga kebersihan sekretariat.
                   </div>
                 </div>
               ) : (
@@ -510,25 +509,19 @@ export default function PiketPage() {
                   }}
                 >
                   <Camera size={18} />
-                  {isShiftHadir ? 'AMBIL ULANG FOTO' : 'ABSEN DENGAN FOTO (KAMERA)'}
+                  {isShiftHadir ? 'AMBIL ULANG FOTO ABSENSI' : 'ABSEN SEKARANG (FOTO BUKTI WEB)'}
                 </button>
 
-                <button
-                  className="btn btn-secondary"
-                  onClick={() => setIsGformModalOpen(true)}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: 6,
-                    padding: '12px 16px',
-                    color: '#0f766e',
-                    borderColor: '#99f6e4'
-                  }}
-                >
-                  <ExternalLink size={16} />
-                  Buka GFORM Digital
-                </button>
+                {isShiftHadir && (
+                  <button
+                    className="btn btn-secondary"
+                    onClick={() => handleResetStatus(shiftToday.id)}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '12px 16px' }}
+                    title="Reset status ke Belum Absen"
+                  >
+                    <RotateCcw size={15} /> Reset Status
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -601,7 +594,7 @@ export default function PiketPage() {
               <ul style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: '12px', color: 'var(--gray-700)' }}>
                 <li style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <Check size={14} color="var(--success)" />
-                  <span>Isi formulir absensi digital Google Form (GFORM)</span>
+                  <span>Lakukan absensi digital langsung melalui website ini</span>
                 </li>
                 <li style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <Check size={14} color="var(--success)" />
@@ -1044,70 +1037,7 @@ export default function PiketPage() {
         </div>
       )}
 
-      {/* ================= MODAL GOOGLE FORM (GFORM) ================= */}
-      {isGformModalOpen && (
-        <Modal
-          title="Absensi Digital Piket Sekretariat (GFORM)"
-          onClose={() => setIsGformModalOpen(false)}
-        >
-          <div style={{ padding: 'var(--space-2)' }}>
-            <div style={{ textAlign: 'center', marginBottom: 'var(--space-4)' }}>
-              <div style={{
-                width: 50,
-                height: 50,
-                borderRadius: '50%',
-                background: '#e6f4ea',
-                color: '#137333',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: 8
-              }}>
-                <FileText size={26} />
-              </div>
-              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: 0 }}>
-                Google Form Absensi Piket
-              </h3>
-              <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--gray-600)', margin: '4px 0 0' }}>
-                Formulir absensi digital resmi BEM KM FTI UNAND Kabinet Vismayakriya 2025/2026.
-              </p>
-            </div>
 
-            <div style={{ background: '#f8fafc', padding: 14, borderRadius: 'var(--radius-md)', border: '1px solid var(--gray-200)', marginBottom: 'var(--space-4)', fontSize: '12.5px', color: 'var(--gray-700)' }}>
-              <div style={{ fontWeight: 700, marginBottom: 6, color: 'var(--gray-900)' }}>Petunjuk Pengisian GFORM:</div>
-              <ol style={{ paddingLeft: 18, margin: 0, display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <li>Pastikan mengisi nama lengkap dan jabatan sesuai SK Pengurus.</li>
-                <li>Pilih shift jadwal: <strong>{shiftToday.minggu} — {shiftToday.hari}</strong> (Pukul 09.00–16.00 WIB).</li>
-                <li>Lampirkan foto selfie kehadiran di dalam ruang sekretariat.</li>
-                <li>Konfirmasi kondisi kebersihan dan kelengkapan inventaris sekretariat.</li>
-              </ol>
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 'var(--space-3)' }}>
-              <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={() => setIsGformModalOpen(false)}
-              >
-                Tutup
-              </button>
-              <a
-                href="https://forms.gle/vismayakriya-piket-sekre"
-                target="_blank"
-                rel="noreferrer"
-                className="btn btn-primary"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#107569' }}
-                onClick={() => {
-                  addToast('Membuka Google Form Absensi Piket...', 'info');
-                  setIsGformModalOpen(false);
-                }}
-              >
-                <ExternalLink size={15} /> Buka Link GFORM di Tab Baru
-              </a>
-            </div>
-          </div>
-        </Modal>
-      )}
 
       {/* ================= MODAL KAMERA FOTO ABSENSI ================= */}
       {isCameraModalOpen && (

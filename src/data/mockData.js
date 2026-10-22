@@ -4840,9 +4840,9 @@ export const KETENTUAN_PIKET = [
   },
   {
     no: 3,
-    judul: 'Absensi Digital (GFORM)',
-    deskripsi: 'Pengurus wajib mengisi absensi secara digital (GFORM).',
-    badge: 'GFORM Digital'
+    judul: 'Absensi Digital di Website',
+    deskripsi: 'Pengurus wajib mengisi absensi secara digital langsung melalui website ini.',
+    badge: 'Absensi Web'
   },
   {
     no: 4,

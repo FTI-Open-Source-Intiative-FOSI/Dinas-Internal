@@ -156,7 +156,7 @@ Kode: INTERNAL
 ### Ketentuan Pelaksanaan Piket Sekretariat
 1. Piket dilaksanakan pada pukul 09.00–16.00 WIB.
 2. Setiap pengurus wajib melaksanakan piket sesuai jadwal.
-3. Pengurus wajib mengisi absensi secara digital (GFORM).
+3. Pengurus wajib mengisi absensi secara digital langsung melalui website ini.
 4. Pengurus bertanggung jawab menjaga kebersihan sekretariat selama piket berlangsung.
 5. Pengurus wajib melakukan pengecekan kelengkapan inventaris sekretariat.
 6. Apabila berhalangan hadir sesuai jadwal, pengurus wajib melapor kepada PJ piket dan mengganti jadwal di hari lain.
