@@ -22,6 +22,7 @@ export default function PiketPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
   const [selectedPhotoPreview, setSelectedPhotoPreview] = useState(null);
+  const [highlightShiftCard, setHighlightShiftCard] = useState(false);
 
   // Waktu berjalan
   const [currentTimeStr, setCurrentTimeStr] = useState(() => {
@@ -188,6 +189,23 @@ export default function PiketPage() {
     });
   }, [jadwalPiket, selectedMinggu, selectedHariFilter, searchQuery]);
 
+  const handleViewMyShift = () => {
+    if (!myPiketShift) return;
+    setSelectedShiftId(myPiketShift.id);
+    setActiveTab('hari-ini');
+    setHighlightShiftCard(true);
+    addToast(`Menampilkan jadwal piket Anda: Minggu ${myPiketShift.minggu} (${myPiketShift.hari})`, 'info');
+    setTimeout(() => {
+      const el = document.getElementById('lembar-absensi-card');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 60);
+    setTimeout(() => {
+      setHighlightShiftCard(false);
+    }, 2500);
+  };
+
   return (
     <div className="page-container">
       {/* Header Halaman */}
@@ -270,12 +288,10 @@ export default function PiketPage() {
             </span>
             <button
               className="btn btn-primary btn-sm"
-              onClick={() => {
-                setSelectedShiftId(myPiketShift.id);
-                setActiveTab('hari-ini');
-              }}
+              onClick={handleViewMyShift}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
             >
-              Lihat Shift Saya
+              <Eye size={14} /> Lihat Shift Saya
             </button>
           </div>
         </div>
@@ -315,10 +331,13 @@ export default function PiketPage() {
           {/* Kolom Kiri: Kartu Absensi */}
           <div>
             <div
+              id="lembar-absensi-card"
               className="card"
               style={{
                 borderTop: isShiftHadir ? '4px solid var(--success)' : '4px solid var(--primary-600)',
-                boxShadow: 'var(--shadow-md)'
+                boxShadow: highlightShiftCard ? '0 0 0 3px var(--primary-500), 0 10px 25px -5px rgba(59, 130, 246, 0.4)' : 'var(--shadow-md)',
+                transform: highlightShiftCard ? 'scale(1.01)' : 'scale(1)',
+                transition: 'all 0.35s ease'
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-4)' }}>
