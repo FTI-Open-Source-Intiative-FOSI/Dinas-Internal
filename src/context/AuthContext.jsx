@@ -6,7 +6,7 @@ const AuthContext = createContext(null);
 // Pengurus Inti: Gubernur, Wagub, Sekda, Benda
 const INTI_ROLES = [ROLES.GUBERNUR, ROLES.WAKIL_GUBERNUR, ROLES.SEKRETARIS_DAERAH, ROLES.BENDAHARA_DAERAH];
 
-// Presidium BEM: Pengurus Inti + Kepala Dinas (Kadin) + Sekretaris Dinas (Sekdin) + Kabiro + Sekbi
+// Presidium BEM: Pengurus Inti + Kepala Dinas (Kadin) + Sekretaris Dinas (Sekdin) + Kabir + Sekbir
 const PRESIDIUM_ROLES = [
   ...INTI_ROLES,
   ROLES.KEPALA_DINAS,

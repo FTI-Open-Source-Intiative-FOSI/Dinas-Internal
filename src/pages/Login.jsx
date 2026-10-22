@@ -11,13 +11,13 @@ export default function Login() {
     'Pengurus Inti': USERS.filter(u =>
       !u.isRevoked && [ROLES.GUBERNUR, ROLES.WAKIL_GUBERNUR, ROLES.SEKRETARIS_DAERAH, ROLES.BENDAHARA_DAERAH].includes(u.role)
     ),
-    'Kepala Dinas & Kepala Biro (Kadin & Kabiro)': USERS.filter(u =>
+    'Kepala Dinas & Kepala Biro (Kadin & Kabir)': USERS.filter(u =>
       !u.isRevoked && [ROLES.KEPALA_DINAS, ROLES.KEPALA_BIRO].includes(u.role)
     ),
-    'Sekretaris Dinas & Biro (Sekdin & Sekbi)': USERS.filter(u =>
+    'Sekretaris Dinas & Sekretaris Biro (Sekdin & Sekbir)': USERS.filter(u =>
       !u.isRevoked && [ROLES.SEKRETARIS_DINAS, ROLES.SEKRETARIS_BIRO].includes(u.role)
     ),
-    'Bendahara Dinas & Biro (Bendis & Benbi)': USERS.filter(u =>
+    'Bendahara Dinas & Bendahara Biro': USERS.filter(u =>
       !u.isRevoked && [ROLES.BENDAHARA_DINAS, ROLES.BENDAHARA_BIRO].includes(u.role)
     ),
     'Staff Ahli & Pelaksana': USERS.filter(u => !u.isRevoked && u.role === ROLES.STAFF),
@@ -42,9 +42,10 @@ export default function Login() {
     { id: 'u81', label: 'Wakil Gubernur (Muhammad Farid Junaidi)' },
     { id: 'u3', label: 'Bendahara Daerah (Ashyra Prasiwi)' },
     { id: 'u36', label: 'Kadin Internal (Ferdian Rahman)' },
+    { id: 'u37', label: 'Sekdin Internal (Adinda Queen Salsabilla)' },
     { id: 'u35', label: 'Kadin Eksternal (Muhammad Farid Al Hafiz)' },
     { id: 'u44', label: 'Kadin Kastrat (Bayu Mutawakkil)' },
-    { id: 'u7', label: 'Staff Audkes (Muhammad Rafi Saddiq)' },
+    { id: 'u39', label: 'Staff Internal (Muhammad Yusuf)' },
   ];
 
   return (

@@ -332,7 +332,7 @@ function DashboardDinas() {
             Dashboard: {dinas?.namaLengkap || 'Dinas Hubungan Internal'}
           </h1>
           <div style={{ fontSize: 'var(--font-size-sm)', color: 'var(--gray-600)', marginTop: 2 }}>
-            Selamat datang, <strong>{user?.nama}</strong> (Kepala Dinas)
+            Selamat datang, <strong>{user?.nama}</strong> ({user?.role || 'Pengurus'})
           </div>
         </div>
 

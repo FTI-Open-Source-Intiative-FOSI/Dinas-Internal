@@ -176,7 +176,13 @@ export function AppProvider({ children }) {
     pengajuanDana: getSavedState('bem_dana', INITIAL_DANA),
     rapat: getSavedState('bem_rapat', INITIAL_RAPAT),
     calendarEvents: getSavedState('bem_calendar_events', INITIAL_CALENDAR_EVENTS),
-    jadwalPiket: getSavedState('bem_piket', INITIAL_JADWAL),
+    jadwalPiket: (() => {
+      const saved = getSavedState('bem_piket_v2', null);
+      if (saved && Array.isArray(saved) && saved.length >= 40) return saved;
+      const oldSaved = getSavedState('bem_piket', null);
+      if (oldSaved && Array.isArray(oldSaved) && oldSaved.length >= 40) return oldSaved;
+      return INITIAL_JADWAL;
+    })(),
     sesiPiket: getSavedState('bem_sesi_piket', INITIAL_SESI),
     notifikasi: getSavedState('bem_notifikasi', INITIAL_NOTIF),
     toasts: [],
@@ -196,6 +202,7 @@ export function AppProvider({ children }) {
   }, [state.calendarEvents]);
 
   useEffect(() => {
+    localStorage.setItem('bem_piket_v2', JSON.stringify(state.jadwalPiket));
     localStorage.setItem('bem_piket', JSON.stringify(state.jadwalPiket));
   }, [state.jadwalPiket]);
 

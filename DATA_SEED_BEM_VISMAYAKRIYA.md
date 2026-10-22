@@ -22,9 +22,14 @@ Gunakan data berikut sebagai mock/seed data untuk aplikasi internal BEM. Jangan 
 
 *Catatan Struktur & Nomenklatur:*
 - **Pengurus Inti**: Terdiri dari Gubernur, Wakil Gubernur, Sekretaris Daerah, dan Bendahara Daerah.
-- **Presidium**: Mencakup Pengurus Inti, Kepala Dinas (**Kadin**), dan Sekretaris Dinas (**Sekdin**), serta Kepala Biro & Sekretaris Biro.
+- **Presidium**: Mencakup Pengurus Inti, Kepala Dinas (**Kadin**), Sekretaris Dinas (**Sekdin**), Kepala Biro (**Kabir**), dan Sekretaris Biro (**Sekbir**).
 - **Kerahasiaan Presidium**: Akses dan pemberitahuan mengenai agenda/forum Presidium tidak diberitahukan kepada Staff Ahli.
-- **Singkatan Jabatan**: Kepala Dinas disingkat **Kadin**, Sekretaris Dinas disingkat **Sekdin**.
+- **Singkatan Jabatan Resmi**:
+  - Kepala Dinas: **Kadin**
+  - Sekretaris Dinas: **Sekdin**
+  - Kepala Biro: **Kabir**
+  - Sekretaris Biro: **Sekbir**
+  - Bendahara Dinas & Bendahara Biro: **TIDAK DISINGKAT** (ditulis lengkap, tidak disingkat Bendis atau Benbi).
 
 ## 3. BIRO AUDKES
 
@@ -148,7 +153,17 @@ Kode: INTERNAL
 6. **Kalender FTI** — PIC: Arief & Sasya
 7. **Graduation Needs** — PIC: Kayla & Yusuf
 
-*Catatan Piket*: Piket sekretariat bebas dilakukan kapan saja dalam rentang jam 08.00 - 16.00 WIB.
+### Ketentuan Pelaksanaan Piket Sekretariat
+1. Piket dilaksanakan pada pukul 09.00–16.00 WIB.
+2. Setiap pengurus wajib melaksanakan piket sesuai jadwal.
+3. Pengurus wajib mengisi absensi secara digital (GFORM).
+4. Pengurus bertanggung jawab menjaga kebersihan sekretariat selama piket berlangsung.
+5. Pengurus wajib melakukan pengecekan kelengkapan inventaris sekretariat.
+6. Apabila berhalangan hadir sesuai jadwal, pengurus wajib melapor kepada PJ piket dan mengganti jadwal di hari lain.
+7. Pengurus yang melaksanakan piket sesuai jadwal akan mendapatkan tambahan poin (+3).
+8. Pengurus yang tidak melaksanakan piket tanpa izin akan dikenakan pengurangan poin (-3) atau denda.
+9. Durasi minimal pelaksanaan piket adalah 1 jam.
+10. Setelah selesai piket, pastikan sekretariat dalam kondisi rapi, bersih, dan aman sebelum ditinggalkan.
 
 ## 8. DINAS KASTRAT
 
