@@ -16,7 +16,7 @@ export default function DetailRapat() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { rapat, postPengumumanRapat, recordFaceAttendance, cancelRapat, addToast } = useApp();
-  const { user, canManageRapat, canPostAnnouncement } = useAuth();
+  const { user, canManageRapat, canPostAnnouncement, isStaff } = useAuth();
 
   const rapatItem = rapat.find(r => r.id === id);
 
@@ -40,28 +40,6 @@ export default function DetailRapat() {
   const [capturedPhoto, setCapturedPhoto] = useState(null);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
-
-  if (!rapatItem) {
-    return (
-      <div className="page-container">
-        <div className="empty-state">
-          <Users />
-          <p>Rapat tidak ditemukan.</p>
-          <button className="btn btn-secondary mt-4" onClick={() => navigate('/rapat')}>Kembali</button>
-        </div>
-      </div>
-    );
-  }
-
-  const dinas = rapatItem.dinasId ? getDinasById(rapatItem.dinasId) : null;
-  const proker = rapatItem.prokerId ? getProkerById(rapatItem.prokerId) : null;
-  const attendanceList = rapatItem.attendance || [];
-  const announcements = rapatItem.pengumuman || [];
-
-  const isUserParticipant = rapatItem.peserta?.includes(user?.id);
-  const isAlreadyAttended = attendanceList.some(a => a.userId === user?.id);
-  const canManage = canManageRapat(rapatItem);
-  const canPost = canPostAnnouncement(rapatItem);
 
   // Camera handling for Face Recognition
   const startCamera = async () => {
@@ -97,6 +75,46 @@ export default function DetailRapat() {
     }
     return () => stopCamera();
   }, [isFaceAttendanceModalOpen]);
+
+  if (!rapatItem) {
+    return (
+      <div className="page-container">
+        <div className="empty-state">
+          <Users />
+          <p>Rapat tidak ditemukan.</p>
+          <button className="btn btn-secondary mt-4" onClick={() => navigate('/rapat')}>Kembali</button>
+        </div>
+      </div>
+    );
+  }
+
+  const isPresidiumForum = rapatItem.isPresidium || rapatItem.judul?.toLowerCase().includes('presidium') || rapatItem.dinasId === 'sekda';
+  if (isStaff?.() && isPresidiumForum) {
+    return (
+      <div className="page-container">
+        <div className="empty-state">
+          <AlertTriangle size={48} color="var(--danger)" />
+          <h2 style={{ marginTop: 12 }}>Akses Terbatas: Forum Presidium</h2>
+          <p style={{ marginTop: 8, color: 'var(--gray-600)', maxWidth: 480 }}>
+            Informasi dan agenda rapat presidium bersifat tertutup dan hanya dapat diakses oleh Pengurus Inti, Kepala Dinas (Kadin), dan Sekretaris Dinas (Sekdin).
+          </p>
+          <button className="btn btn-secondary mt-4" onClick={() => navigate('/rapat')}>
+            Kembali ke Daftar Rapat
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const dinas = rapatItem.dinasId ? getDinasById(rapatItem.dinasId) : null;
+  const proker = rapatItem.prokerId ? getProkerById(rapatItem.prokerId) : null;
+  const attendanceList = rapatItem.attendance || [];
+  const announcements = rapatItem.pengumuman || [];
+
+  const isUserParticipant = rapatItem.peserta?.includes(user?.id);
+  const isAlreadyAttended = attendanceList.some(a => a.userId === user?.id);
+  const canManage = canManageRapat(rapatItem);
+  const canPost = canPostAnnouncement(rapatItem);
 
   const handleTriggerFaceScan = async () => {
     setScanningState('scanning');

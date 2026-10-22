@@ -7,7 +7,7 @@ import {
   Wallet, Users, ClipboardCheck, ArrowRight, TrendingUp, TrendingDown, Calendar
 } from 'lucide-react';
 import Modal from '../components/ui/Modal';
-import { DINAS_LIST, getUserById, getDinasById, getProkerById, formatCurrency, formatDate, formatTime, STATUS_PROKER, STATUS_DANA } from '../data/mockData';
+import { DINAS_LIST, getUserById, getDinasById, getProkerById, getProkerPic, formatCurrency, formatDate, formatTime, STATUS_PROKER, STATUS_DANA } from '../data/mockData';
 
 function StatusBadge({ status }) {
   const classMap = {
@@ -427,7 +427,7 @@ function DashboardDinas() {
                         {pk.nama}
                       </div>
                       <div style={{ fontSize: '11px', color: 'var(--gray-500)', marginTop: 2 }}>
-                        PIC: {pic?.nama || 'Anggota'} · Deadline: {formatDate(pk.deadline)}
+                        PIC: {getProkerPic(pk)} · Deadline: {formatDate(pk.deadline)}
                       </div>
                     </div>
 

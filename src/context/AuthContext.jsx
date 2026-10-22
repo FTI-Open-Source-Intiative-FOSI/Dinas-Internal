@@ -3,21 +3,31 @@ import { USERS, ROLES, DINAS_LIST } from '../data/mockData';
 
 const AuthContext = createContext(null);
 
-const PIMPINAN_ROLES = [ROLES.GUBERNUR, ROLES.SEKRETARIS_DAERAH, ROLES.BENDAHARA_DAERAH];
+// Pengurus Inti: Gubernur, Wagub, Sekda, Benda
+const INTI_ROLES = [ROLES.GUBERNUR, ROLES.WAKIL_GUBERNUR, ROLES.SEKRETARIS_DAERAH, ROLES.BENDAHARA_DAERAH];
+
+// Presidium BEM: Pengurus Inti + Kepala Dinas (Kadin) + Sekretaris Dinas (Sekdin) + Kabiro + Sekbi
+const PRESIDIUM_ROLES = [
+  ...INTI_ROLES,
+  ROLES.KEPALA_DINAS,
+  ROLES.KEPALA_BIRO,
+  ROLES.SEKRETARIS_DINAS,
+  ROLES.SEKRETARIS_BIRO
+];
 
 function getInitialUser() {
   try {
     const saved = localStorage.getItem('bem_auth_user');
     if (saved) {
       const parsed = JSON.parse(saved);
-      const found = USERS.find(u => u.id === parsed.id);
+      const found = USERS.find(u => u.id === parsed.id && !u.isRevoked);
       if (found) return found;
     }
   } catch (e) {
     console.error('Error loading stored user', e);
   }
-  // Default to Ferdian Rahman (Kepala Dinas INTERNAL)
-  const defaultUser = USERS.find(u => u.nama === 'Ferdian Rahman') || USERS[0];
+  // Default to Ferdian Rahman (Kadin INTERNAL)
+  const defaultUser = USERS.find(u => u.nama === 'Ferdian Rahman' && !u.isRevoked) || USERS[0];
   return defaultUser;
 }
 
@@ -58,7 +68,7 @@ export function AuthProvider({ children }) {
 
   const login = useCallback((userId) => {
     const user = USERS.find(u => u.id === userId);
-    if (user) {
+    if (user && !user.isRevoked && user.statusAkses !== 'Dicabut') {
       dispatch({ type: 'LOGIN', payload: user });
     }
   }, []);
@@ -67,17 +77,25 @@ export function AuthProvider({ children }) {
     dispatch({ type: 'LOGOUT' });
   }, []);
 
-  const isPimpinan = useCallback(() => {
-    return state.user && PIMPINAN_ROLES.includes(state.user.role);
+  const isInti = useCallback(() => {
+    return state.user && INTI_ROLES.includes(state.user.role);
   }, [state.user]);
+
+  const isPresidium = useCallback(() => {
+    return state.user && PRESIDIUM_ROLES.includes(state.user.role);
+  }, [state.user]);
+
+  const isPimpinan = isInti;
 
   const isBendahara = useCallback(() => {
     return state.user?.role === ROLES.BENDAHARA_DAERAH;
   }, [state.user]);
 
-  const isKadis = useCallback(() => {
+  const isKadin = useCallback(() => {
     return [ROLES.KEPALA_DINAS, ROLES.KEPALA_BIRO].includes(state.user?.role);
   }, [state.user]);
+
+  const isKadis = isKadin;
 
   const isSekdin = useCallback(() => {
     return [ROLES.SEKRETARIS_DINAS, ROLES.SEKRETARIS_BIRO].includes(state.user?.role);
@@ -97,6 +115,10 @@ export function AuthProvider({ children }) {
       ROLES.KEPALA_BIRO, ROLES.SEKRETARIS_BIRO, ROLES.BENDAHARA_BIRO
     ].includes(state.user?.role);
   }, [state.user]);
+
+  const canAccessPresidium = useCallback(() => {
+    return isPresidium();
+  }, [isPresidium]);
 
   // Hak akses edit progress proker:
   // Kadin hanya boleh mengubah proker di bawah dinasnya, Presidium untuk semua
@@ -191,8 +213,12 @@ export function AuthProvider({ children }) {
       ...state,
       login,
       logout,
+      isInti,
+      isPresidium,
+      canAccessPresidium,
       isPimpinan,
       isBendahara,
+      isKadin,
       isKadis,
       isSekdin,
       isBendis,

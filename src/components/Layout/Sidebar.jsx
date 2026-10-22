@@ -16,10 +16,18 @@ const iconMap = {
 };
 
 export default function Sidebar({ isOpen, onClose }) {
-  const { user, logout, getNavItems } = useAuth();
-  const { unreadNotifCount } = useApp();
+  const { user, logout, getNavItems, isStaff } = useAuth();
+  const { notifikasi } = useApp();
   const location = useLocation();
   const navItems = getNavItems();
+
+  const unreadNotifCount = notifikasi.filter(n => {
+    if (n.read) return false;
+    if (isStaff?.() && (n.target === 'presidium' || n.pesan?.toLowerCase().includes('presidium') || n.link?.includes('/rapat/r1'))) {
+      return false;
+    }
+    return true;
+  }).length;
 
   return (
     <>

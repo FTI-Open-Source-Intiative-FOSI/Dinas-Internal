@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useApp } from '../../context/AppContext';
 import { FolderKanban, Search, Plus, TrendingUp, CheckCircle, Clock, AlertCircle } from 'lucide-react';
-import { getDinasById, getUserById, formatDate, DINAS_LIST, STATUS_PROKER } from '../../data/mockData';
+import { getDinasById, getUserById, getProkerPic, formatDate, DINAS_LIST, STATUS_PROKER } from '../../data/mockData';
 import Modal from '../../components/ui/Modal';
 
 function StatusBadge({ status }) {
@@ -227,7 +227,7 @@ export default function DaftarProker() {
                           <span>{pk.nama}</span>
                           {pk.lastUpdated && (
                             <span style={{ fontSize: '10px', color: 'var(--gray-500)', marginTop: 2 }}>
-                              Diupdate oleh {pk.updatedBy || 'Kadis'}
+                              Diupdate oleh {pk.updatedBy || 'Kadin'}
                             </span>
                           )}
                         </div>
@@ -236,7 +236,7 @@ export default function DaftarProker() {
                         <span className="badge badge-persiapan">{dinas?.nama}</span>
                       </td>
                       <td style={{ fontSize: 'var(--font-size-sm)' }}>
-                        {pic?.nama || '-'}
+                        {getProkerPic(pk)}
                       </td>
                       <td>
                         <StatusBadge status={pk.status} />

@@ -8,9 +8,7 @@ import {
 import { getUserById, formatDate, formatTime, USERS } from '../../data/mockData';
 import Modal from '../../components/ui/Modal';
 
-// Durasi batas absensi (1 jam = 3600000 ms)
-const ABSENSI_WINDOW_MS = 60 * 60 * 1000;
-
+// Jam operasional piket: 08.00 - 16.00 WIB (Jam bebas fleksibel)
 export default function PiketPage() {
   const { user } = useAuth();
   const { jadwalPiket, recordPiketAttendance, resetPiketAttendance, addToast } = useApp();
@@ -19,42 +17,19 @@ export default function PiketPage() {
   const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
   const [selectedPhotoPreview, setSelectedPhotoPreview] = useState(null);
 
-  // Reference timestamp untuk window 1 jam agar persistent dan tidak reset saat refresh
-  const [shiftStartTime, setShiftStartTime] = useState(() => {
-    const saved = localStorage.getItem('bem_piket_shift_start');
-    if (saved) return Number(saved);
-    // Jika belum ada, set shift mulai 18 menit yang lalu agar countdown menampilkan ~42 menit seperti spesifikasi
-    const defaultStart = Date.now() - (17 * 60 * 1000 + 43 * 1000); // sisa ~42:17
-    localStorage.setItem('bem_piket_shift_start', defaultStart.toString());
-    return defaultStart;
+  // Waktu terkini
+  const [currentTimeStr, setCurrentTimeStr] = useState(() => {
+    const d = new Date();
+    return d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
   });
 
-  const [remainingMs, setRemainingMs] = useState(() => {
-    const elapsed = Date.now() - shiftStartTime;
-    return Math.max(0, ABSENSI_WINDOW_MS - elapsed);
-  });
-
-  // Countdown timer interval (1 second)
   useEffect(() => {
     const interval = setInterval(() => {
-      const elapsed = Date.now() - shiftStartTime;
-      const left = ABSENSI_WINDOW_MS - elapsed;
-      setRemainingMs(Math.max(0, left));
+      const d = new Date();
+      setCurrentTimeStr(d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }));
     }, 1000);
-
     return () => clearInterval(interval);
-  }, [shiftStartTime]);
-
-  const isWindowExpired = remainingMs <= 0;
-
-  // Format MM:SS
-  const formatCountdown = (ms) => {
-    if (ms <= 0) return '00:00';
-    const totalSec = Math.floor(ms / 1000);
-    const m = Math.floor(totalSec / 60);
-    const s = totalSec % 60;
-    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-  };
+  }, []);
 
   // State shift yang dipilih untuk hari ini (prioritaskan yang Belum Absen atau staff Muhammad Yusuf u39)
   const [selectedShiftId, setSelectedShiftId] = useState(() => {
@@ -149,22 +124,10 @@ export default function PiketPage() {
     setIsCameraModalOpen(false);
   };
 
-  // Reset shift testing timer
-  const handleResetTimerTest = () => {
-    const newStart = Date.now();
-    localStorage.setItem('bem_piket_shift_start', newStart.toString());
-    setShiftStartTime(newStart);
-    setRemainingMs(ABSENSI_WINDOW_MS);
-    addToast('Timer 1 jam berhasil di-reset untuk simulasi pengujian!', 'info');
-  };
-
   // Reset shift status ke Belum Absen
   const handleResetStatus = () => {
     resetPiketAttendance(shiftToday.id);
-    const newStart = Date.now() - (17 * 60 * 1000 + 43 * 1000); // sisa ~42:17
-    localStorage.setItem('bem_piket_shift_start', newStart.toString());
-    setShiftStartTime(newStart);
-    setRemainingMs(ABSENSI_WINDOW_MS - (17 * 60 * 1000 + 43 * 1000));
+    addToast('Status piket berhasil di-reset ke Belum Absen.', 'info');
   };
 
   return (
@@ -177,7 +140,7 @@ export default function PiketPage() {
             Piket Sekretariat BEM KM FTI UNAND
           </h1>
           <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--gray-600)', marginTop: 4 }}>
-            Sistem absensi piket harian berbasis bukti foto dan batas waktu countdown 1 jam.
+            Sistem absensi piket harian sekretariat berbasis foto dengan jam fleksibel (rentang 08.00 s.d. 16.00 WIB).
           </p>
         </div>
 
@@ -188,9 +151,6 @@ export default function PiketPage() {
             title="Reset status piket ke 'Belum Absen' agar tombol 'Absen Sekarang' muncul kembali"
           >
             <RotateCcw size={14} /> Reset Status (Belum Absen)
-          </button>
-          <button className="btn btn-ghost btn-sm" onClick={handleResetTimerTest} title="Reset Timer 1 Jam Demo">
-            <Clock size={14} /> Reset Timer (60:00)
           </button>
         </div>
       </div>
@@ -212,7 +172,7 @@ export default function PiketPage() {
             <div
               className="card"
               style={{
-                borderTop: isShiftHadir ? '4px solid var(--success)' : isWindowExpired ? '4px solid var(--danger)' : '4px solid var(--primary-600)',
+                borderTop: isShiftHadir ? '4px solid var(--success)' : '4px solid var(--primary-600)',
                 boxShadow: 'var(--shadow-md)'
               }}
             >
@@ -226,8 +186,8 @@ export default function PiketPage() {
                   </h2>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <span className={`badge ${isShiftHadir ? 'badge-selesai' : isWindowExpired ? 'badge-ditolak' : 'badge-menunggu'}`}>
-                    {isShiftHadir ? 'Hadir' : isWindowExpired ? 'Waktu Berakhir' : 'Belum Absen'}
+                  <span className={`badge ${isShiftHadir ? 'badge-selesai' : 'badge-menunggu'}`}>
+                    {isShiftHadir ? 'Hadir' : 'Belum Absen'}
                   </span>
                 </div>
               </div>
@@ -274,10 +234,11 @@ export default function PiketPage() {
                 gap: 'var(--space-4)'
               }}>
                 <div>
-                  <span className="text-xs text-muted">Jadwal Shift:</span>
-                  <div style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--gray-800)', marginTop: 2 }}>
-                    {shiftToday.jamMulai} s/d {shiftToday.jamSelesai || '16:00'} WIB
+                  <span className="text-xs text-muted">Rentang Jam Operasional:</span>
+                  <div style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--primary-700)', marginTop: 2 }}>
+                    08:00 s.d. 16:00 WIB
                   </div>
+                  <span style={{ fontSize: '11px', color: 'var(--gray-600)' }}>Jam Bebas Fleksibel</span>
                 </div>
 
                 <div>
@@ -290,44 +251,34 @@ export default function PiketPage() {
                   </div>
                 </div>
               </div>
-
-              {/* Countdown / Status Section */}
+              {/* Status Section */}
               {!isShiftHadir && (
                 <div style={{
-                  border: '1px dashed var(--gray-300)',
+                  border: '1px dashed var(--primary-300)',
                   borderRadius: 'var(--radius-md)',
                   padding: 'var(--space-4)',
                   marginBottom: 'var(--space-5)',
                   textAlign: 'center',
-                  background: isWindowExpired ? '#fff5f5' : '#f0f7ff'
+                  background: '#f0f7ff'
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: isWindowExpired ? 'var(--danger)' : 'var(--primary-700)', marginBottom: 4 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: 'var(--primary-700)', marginBottom: 4 }}>
                     <Clock size={16} />
                     <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 600, textTransform: 'uppercase' }}>
-                      {isWindowExpired ? 'Batas Waktu Absensi Berakhir' : 'Waktu Tersisa untuk Absensi'}
+                      Rentang Waktu Piket: 08.00 - 16.00 WIB
                     </span>
                   </div>
 
                   <div style={{
-                    fontSize: '2.4rem',
+                    fontSize: '1.6rem',
                     fontWeight: 800,
-                    fontFamily: 'monospace',
-                    color: isWindowExpired ? 'var(--danger)' : 'var(--primary-700)',
-                    letterSpacing: 2
+                    color: 'var(--primary-700)',
+                    marginTop: 4
                   }}>
-                    {formatCountdown(remainingMs)}
+                    Jam Bebas Fleksibel
                   </div>
 
-                  <div style={{ fontSize: '11px', color: 'var(--gray-600)', marginTop: 4 }}>
-                    {isWindowExpired ? (
-                      <span style={{ color: 'var(--danger)', fontWeight: 600 }}>
-                        Periode absensi telah berakhir (melewati batas toleransi 1 jam sejak jam piket dimulai).
-                      </span>
-                    ) : (
-                      <span>
-                        Batas absensi adalah 1 jam sejak waktu piket dimulai ({shiftToday.jamMulai} s.d. 15:00 WIB).
-                      </span>
-                    )}
+                  <div style={{ fontSize: '12px', color: 'var(--gray-600)', marginTop: 4 }}>
+                    Petugas piket bebas hadir dan melakukan absensi kapan saja dalam rentang waktu <strong>08.00 - 16.00 WIB</strong> hari ini.
                   </div>
                 </div>
               )}
@@ -397,7 +348,6 @@ export default function PiketPage() {
               ) : (
                 <button
                   className="btn btn-primary btn-lg w-full"
-                  disabled={isWindowExpired}
                   onClick={() => setIsCameraModalOpen(true)}
                   style={{
                     width: '100%',
@@ -408,12 +358,12 @@ export default function PiketPage() {
                     fontSize: '1rem',
                     fontWeight: 700,
                     padding: '14px 20px',
-                    background: isWindowExpired ? 'var(--gray-300)' : 'var(--primary-600)',
+                    background: 'var(--primary-600)',
                     boxShadow: '0 4px 12px rgba(30, 58, 95, 0.25)'
                   }}
                 >
                   <Camera size={20} />
-                  {isWindowExpired ? 'Periode Absensi Ditutup' : 'ABSEN SEKARANG (FOTO BUKTI)'}
+                  ABSEN SEKARANG (FOTO BUKTI)
                 </button>
               )}
             </div>
@@ -426,19 +376,19 @@ export default function PiketPage() {
               <ul style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', fontSize: 'var(--font-size-sm)', color: 'var(--gray-700)' }}>
                 <li style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
                   <Check size={16} color="var(--primary-600)" style={{ flexShrink: 0, marginTop: 2 }} />
-                  <span>Petugas wajib hadir di Sekretariat BEM KM FTI UNAND sesuai jadwal shift masing-masing.</span>
+                  <span>Petugas wajib hadir di Sekretariat BEM KM FTI UNAND pada hari piket yang dijadwalkan.</span>
+                </li>
+                <li style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                  <Clock size={16} color="var(--primary-600)" style={{ flexShrink: 0, marginTop: 2 }} />
+                  <span><strong>Jam Bebas & Fleksibel:</strong> Jam kehadiran bebas dilakukan kapan saja dalam rentang waktu operasional <strong>08.00 s.d. 16.00 WIB</strong>.</span>
                 </li>
                 <li style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
                   <Check size={16} color="var(--primary-600)" style={{ flexShrink: 0, marginTop: 2 }} />
-                  <span>Absensi dilakukan menggunakan foto langsung di dalam ruangan sekretariat.</span>
+                  <span>Absensi dilakukan dengan mengambil foto langsung di ruangan sekretariat sebagai bukti kehadiran resmi.</span>
                 </li>
                 <li style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-                  <Clock size={16} color="var(--warning)" style={{ flexShrink: 0, marginTop: 2 }} />
-                  <span><strong>Countdown 1 Jam:</strong> Absensi hanya dibuka selama 1 jam pertama sejak jam mulai shift (contoh: 14.00 - 15.00 WIB).</span>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-                  <AlertTriangle size={16} color="var(--danger)" style={{ flexShrink: 0, marginTop: 2 }} />
-                  <span>Jika lewat 1 jam, sistem otomatis mengunci form dan menandai shift sebagai tidak selesai/alpa.</span>
+                  <Check size={16} color="var(--primary-600)" style={{ flexShrink: 0, marginTop: 2 }} />
+                  <span>Setelah foto tersimpan, status piket akan otomatis terverifikasi dan tercatat ke sistem.</span>
                 </li>
               </ul>
             </div>

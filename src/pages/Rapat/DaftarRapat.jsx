@@ -9,7 +9,7 @@ import { getDinasById, getUserById, getProkerById, formatDate, formatTime, USERS
 import Modal from '../../components/ui/Modal';
 
 export default function DaftarRapat() {
-  const { user, isPimpinan, canManageRapat } = useAuth();
+  const { user, isPimpinan, isStaff, canManageRapat } = useAuth();
   const { rapat, createRapat } = useApp();
   const navigate = useNavigate();
 
@@ -33,8 +33,13 @@ export default function DaftarRapat() {
     peserta: USERS.filter(u => u.dinasId === defaultDinasId).map(u => u.id)
   });
 
-  // Filter rapat
-  let filtered = [...rapat];
+  // Filter rapat: Staff ahli tidak diberikan akses / notifikasi tentang forum presidium
+  let filtered = rapat.filter(r => {
+    if (isStaff?.() && (r.isPresidium || r.judul?.toLowerCase().includes('presidium') || r.dinasId === 'sekda')) {
+      return false;
+    }
+    return true;
+  });
   if (filterDinas) {
     filtered = filtered.filter(r => r.dinasId === filterDinas);
   }

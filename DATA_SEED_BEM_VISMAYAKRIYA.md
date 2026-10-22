@@ -10,16 +10,21 @@ Gunakan data berikut sebagai mock/seed data untuk aplikasi internal BEM. Jangan 
 - Total pengurus: 81 orang
 - Unit kerja: 8 Dinas dan 2 Biro
 
-## 2. PRESIDIUM
+## 2. PENGURUS INTI & PRESIDIUM
 
+### Pengurus Inti
 | Nama | Role |
 |---|---|
 | Mujahid Adlis Salam | Gubernur |
-| [ISI NAMA WAKIL GUBERNUR] | Wakil Gubernur |
+| Muhammad Farid Junaidi | Wakil Gubernur |
 | Alya Ananta Taufik | Sekretaris Daerah |
 | Ashyra Prasiwi | Bendahara Daerah |
 
-Catatan: dokumen Grand Proposal yang menjadi sumber data mencantumkan nama Gubernur Mujahid Adlis Salam, Sekretaris Daerah Alya Ananta Taufik, dan Bendahara Daerah Ashyra Prasiwi. Nama Wakil Gubernur tidak tercantum dalam bagian struktur yang tersedia. Jangan mengarang nama Wakil Gubernur.
+*Catatan Struktur & Nomenklatur:*
+- **Pengurus Inti**: Terdiri dari Gubernur, Wakil Gubernur, Sekretaris Daerah, dan Bendahara Daerah.
+- **Presidium**: Mencakup Pengurus Inti, Kepala Dinas (**Kadin**), dan Sekretaris Dinas (**Sekdin**), serta Kepala Biro & Sekretaris Biro.
+- **Kerahasiaan Presidium**: Akses dan pemberitahuan mengenai agenda/forum Presidium tidak diberitahukan kepada Staff Ahli.
+- **Singkatan Jabatan**: Kepala Dinas disingkat **Kadin**, Sekretaris Dinas disingkat **Sekdin**.
 
 ## 3. BIRO AUDKES
 
@@ -102,14 +107,14 @@ Kode: EKSTERNAL
 
 | Nama | Role |
 |---|---|
-| Dzakira Hapsarini | Kepala Dinas |
-| Alya Putri Helda | Sekretaris Dinas |
+| Muhammad Farid Al Hafiz | Kepala Dinas (Kadin) |
+| Aisyah Widia Wati | Sekretaris Dinas (Sekdin) |
 | Zaskya Marvira | Bendahara Dinas |
 | Weldia Novianda | Staff |
-| Aisyah Widia Wati H. | Staff |
 | Kesya Ashilah Rianto | Staff |
 | Muhammad Zaky Ilham | Staff |
-| Muhammad Farid Al Hafizh | Staff |
+| *Dzakira Hapsarini* | *Akses Dicabut / Nonaktif* |
+| *Alya Putri Helda* | *Akses Dicabut / Nonaktif* |
 
 ### Program Kerja EKSTERNAL
 1. BEM Visit
@@ -125,23 +130,25 @@ Kode: INTERNAL
 
 | Nama | Role |
 |---|---|
-| Ferdian Rahman | Kepala Dinas |
-| Adinda Queen Salsabilla | Sekretaris Dinas |
+| Ferdian Rahman | Kepala Dinas (Kadin) |
+| Adinda Queen Salsabilla | Sekretaris Dinas (Sekdin) |
 | Siti Kayla Reyhana | Bendahara Dinas |
 | Muhammad Yusuf | Staff |
 | Sasya Zamora | Staff |
 | Ramadhani Amelia Putri | Staff |
 | Muhammad Arief Nasril | Staff |
-| Muhammad Athaya Abriansyah | Staff |
+| *Muhammad Athaya Abriansyah* | *Akses Dicabut / Nonaktif* |
 
 ### Program Kerja INTERNAL
-1. Bakti FTI
-2. FTI Parade
-3. InKor (Internal Koordinasi)
-4. SaMawa (Sapa Ormawa)
-5. VisGo (Vismayakriya Goro)
-6. Kalender FTI
-7. Graduation Needs
+1. **Bakti FTI** — PIC: Yusuf & Sasya
+2. **VisGo (Vismayakriya Goro)** — PIC: Kayla & Putri
+3. **FTI Parade** — PIC: Arief & Sasya
+4. **InKor (Internal Koordinasi)** — PIC: Arief & Sasya
+5. **SaMawa (Sapa Ormawa)** — PIC: Putri & Yusuf
+6. **Kalender FTI** — PIC: Arief & Sasya
+7. **Graduation Needs** — PIC: Kayla & Yusuf
+
+*Catatan Piket*: Piket sekretariat bebas dilakukan kapan saja dalam rentang jam 08.00 - 16.00 WIB.
 
 ## 8. DINAS KASTRAT
 

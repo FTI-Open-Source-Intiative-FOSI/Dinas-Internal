@@ -7,7 +7,7 @@ import {
   AlertTriangle, CheckCircle, Clock, Circle, TrendingUp,
   Edit3, Shield, History, Save, X
 } from 'lucide-react';
-import { getDinasById, getUserById, formatDate, formatCurrency } from '../../data/mockData';
+import { getDinasById, getUserById, getProkerPic, formatDate, formatCurrency } from '../../data/mockData';
 import Modal from '../../components/ui/Modal';
 
 function StatusBadge({ status }) {
@@ -109,7 +109,7 @@ export default function DetailProker() {
             {isOverdue && <span className="badge badge-ditolak">Melewati Deadline</span>}
             {proker.lastUpdated && (
               <span style={{ fontSize: 'var(--font-size-xs)', color: 'var(--gray-500)' }}>
-                Terakhir diupdate: {formatDate(proker.lastUpdated.split('T')[0])} oleh <strong>{proker.updatedBy || 'Kadis'}</strong>
+                Terakhir diupdate: {formatDate(proker.lastUpdated.split('T')[0])} oleh <strong>{proker.updatedBy || 'Kadin'}</strong>
               </span>
             )}
           </div>
@@ -137,7 +137,7 @@ export default function DetailProker() {
               color: 'var(--gray-600)'
             }}>
               <Shield size={14} />
-              <span>Hanya Kepala {dinas?.nama || 'Dinas'} yang berwenang mengubah progress</span>
+              <span>Hanya Kepala {dinas?.nama || 'Dinas'} (Kadin) yang berwenang mengubah progress</span>
             </div>
           )}
         </div>
@@ -160,7 +160,7 @@ export default function DetailProker() {
               </div>
               <div className="meta-item">
                 <span className="meta-label">Penanggung Jawab (PIC)</span>
-                <span className="meta-value">{pic?.nama}</span>
+                <span className="meta-value">{getProkerPic(proker)}</span>
               </div>
               <div className="meta-item">
                 <span className="meta-label">Tanggal Mulai</span>

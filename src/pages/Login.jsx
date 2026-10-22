@@ -8,19 +8,19 @@ export default function Login() {
   const [selectedUser, setSelectedUser] = useState('');
 
   const groupedUsers = {
-    'Presidium BEM': USERS.filter(u =>
-      [ROLES.GUBERNUR, ROLES.SEKRETARIS_DAERAH, ROLES.BENDAHARA_DAERAH].includes(u.role)
+    'Pengurus Inti': USERS.filter(u =>
+      !u.isRevoked && [ROLES.GUBERNUR, ROLES.WAKIL_GUBERNUR, ROLES.SEKRETARIS_DAERAH, ROLES.BENDAHARA_DAERAH].includes(u.role)
     ),
-    'Kepala Dinas & Kepala Biro': USERS.filter(u =>
-      [ROLES.KEPALA_DINAS, ROLES.KEPALA_BIRO].includes(u.role)
+    'Kepala Dinas & Kepala Biro (Kadin & Kabiro)': USERS.filter(u =>
+      !u.isRevoked && [ROLES.KEPALA_DINAS, ROLES.KEPALA_BIRO].includes(u.role)
     ),
-    'Sekretaris Dinas & Biro': USERS.filter(u =>
-      [ROLES.SEKRETARIS_DINAS, ROLES.SEKRETARIS_BIRO].includes(u.role)
+    'Sekretaris Dinas & Biro (Sekdin & Sekbi)': USERS.filter(u =>
+      !u.isRevoked && [ROLES.SEKRETARIS_DINAS, ROLES.SEKRETARIS_BIRO].includes(u.role)
     ),
-    'Bendahara Dinas & Biro': USERS.filter(u =>
-      [ROLES.BENDAHARA_DINAS, ROLES.BENDAHARA_BIRO].includes(u.role)
+    'Bendahara Dinas & Biro (Bendis & Benbi)': USERS.filter(u =>
+      !u.isRevoked && [ROLES.BENDAHARA_DINAS, ROLES.BENDAHARA_BIRO].includes(u.role)
     ),
-    'Staff Ahli & Pelaksana': USERS.filter(u => u.role === ROLES.STAFF),
+    'Staff Ahli & Pelaksana': USERS.filter(u => !u.isRevoked && u.role === ROLES.STAFF),
   };
 
   const handleLogin = (e) => {
@@ -39,9 +39,11 @@ export default function Login() {
   // Quick select accounts for easy testing
   const quickAccounts = [
     { id: 'u1', label: 'Gubernur (Mujahid Adlis Salam)' },
+    { id: 'u81', label: 'Wakil Gubernur (Muhammad Farid Junaidi)' },
     { id: 'u3', label: 'Bendahara Daerah (Ashyra Prasiwi)' },
-    { id: 'u36', label: 'Kadis Internal (Ferdian Rahman)' },
-    { id: 'u44', label: 'Kadis Kastrat (Bayu Mutawakkil)' },
+    { id: 'u36', label: 'Kadin Internal (Ferdian Rahman)' },
+    { id: 'u35', label: 'Kadin Eksternal (Muhammad Farid Al Hafiz)' },
+    { id: 'u44', label: 'Kadin Kastrat (Bayu Mutawakkil)' },
     { id: 'u7', label: 'Staff Audkes (Muhammad Rafi Saddiq)' },
   ];
 

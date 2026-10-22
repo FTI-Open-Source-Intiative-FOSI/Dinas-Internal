@@ -12,6 +12,7 @@ export const ORGANISASI = {
 
 export const ROLES = {
   GUBERNUR: 'Gubernur',
+  WAKIL_GUBERNUR: 'Wakil Gubernur',
   SEKRETARIS_DAERAH: 'Sekretaris Daerah',
   BENDAHARA_DAERAH: 'Bendahara Daerah',
   KEPALA_DINAS: 'Kepala Dinas',
@@ -22,6 +23,23 @@ export const ROLES = {
   BENDAHARA_BIRO: 'Bendahara Biro',
   STAFF: 'Staff',
 };
+
+// Pengurus Inti: Gubernur, Wagub, Sekda, Benda
+export const ROLES_INTI = [
+  ROLES.GUBERNUR,
+  ROLES.WAKIL_GUBERNUR,
+  ROLES.SEKRETARIS_DAERAH,
+  ROLES.BENDAHARA_DAERAH
+];
+
+// Presidium BEM: Pengurus Inti + Kepala Dinas (Kadin) + Sekretaris Dinas (Sekdin) + Kepala Biro + Sekretaris Biro
+export const ROLES_PRESIDIUM = [
+  ...ROLES_INTI,
+  ROLES.KEPALA_DINAS,
+  ROLES.KEPALA_BIRO,
+  ROLES.SEKRETARIS_DINAS,
+  ROLES.SEKRETARIS_BIRO
+];
 
 export const DINAS_LIST = [
   {
@@ -98,14 +116,14 @@ export const DINAS_LIST = [
     "id": "sekda",
     "kode": "SEKDA",
     "nama": "Sekretaris Daerah",
-    "tipe": "Presidium",
+    "tipe": "Inti",
     "namaLengkap": "Sekretariat Daerah BEM KM FTI UNAND"
   },
   {
     "id": "benda",
     "kode": "BENDA",
     "nama": "Bendahara Daerah",
-    "tipe": "Presidium",
+    "tipe": "Inti",
     "namaLengkap": "Kebendaharaan Daerah BEM KM FTI UNAND"
   }
 ];
@@ -118,6 +136,14 @@ export const USERS = [
     "role": "Gubernur",
     "dinasId": null,
     "avatar": "MS"
+  },
+  {
+    "id": "u81",
+    "nama": "Muhammad Farid Junaidi",
+    "email": "muhammad.farid.junaidi@bem.fti.unand.ac.id",
+    "role": "Wakil Gubernur",
+    "dinasId": null,
+    "avatar": "FJ"
   },
   {
     "id": "u2",
@@ -331,17 +357,21 @@ export const USERS = [
     "id": "u28",
     "nama": "Dzakira Hapsarini",
     "email": "dzakira.hapsarini@bem.fti.unand.ac.id",
-    "role": "Kepala Dinas",
+    "role": "Nonaktif (Akses Dicabut)",
     "dinasId": "eksternal",
-    "avatar": "DH"
+    "avatar": "DH",
+    "isRevoked": true,
+    "statusAkses": "Dicabut"
   },
   {
     "id": "u29",
     "nama": "Alya Putri Helda",
     "email": "alya.putri@bem.fti.unand.ac.id",
-    "role": "Sekretaris Dinas",
+    "role": "Nonaktif (Akses Dicabut)",
     "dinasId": "eksternal",
-    "avatar": "AH"
+    "avatar": "AH",
+    "isRevoked": true,
+    "statusAkses": "Dicabut"
   },
   {
     "id": "u30",
@@ -361,11 +391,11 @@ export const USERS = [
   },
   {
     "id": "u32",
-    "nama": "Aisyah Widia Wati H.",
+    "nama": "Aisyah Widia Wati",
     "email": "aisyah.widia@bem.fti.unand.ac.id",
-    "role": "Staff",
+    "role": "Sekretaris Dinas",
     "dinasId": "eksternal",
-    "avatar": "AH"
+    "avatar": "AW"
   },
   {
     "id": "u33",
@@ -385,9 +415,9 @@ export const USERS = [
   },
   {
     "id": "u35",
-    "nama": "Muhammad Farid Al Hafizh",
+    "nama": "Muhammad Farid Al Hafiz",
     "email": "muhammad.farid@bem.fti.unand.ac.id",
-    "role": "Staff",
+    "role": "Kepala Dinas",
     "dinasId": "eksternal",
     "avatar": "MH"
   },
@@ -451,9 +481,11 @@ export const USERS = [
     "id": "u43",
     "nama": "Muhammad Athaya Abriansyah",
     "email": "muhammad.athaya@bem.fti.unand.ac.id",
-    "role": "Staff",
+    "role": "Nonaktif (Akses Dicabut)",
     "dinasId": "internal",
-    "avatar": "MA"
+    "avatar": "MA",
+    "isRevoked": true,
+    "statusAkses": "Dicabut"
   },
   {
     "id": "u44",
@@ -1933,7 +1965,7 @@ export const PROGRAM_KERJA = [
     "id": "pk25",
     "nama": "FTI Reconnect",
     "dinasId": "eksternal",
-    "picId": "u28",
+    "picId": "u35",
     "deskripsi": "Program kerja FTI Reconnect oleh EKSTERNAL Kabinet Vismayakriya 2025/2026. Target: Temu alumni FTI UNAND lintas angkatan.",
     "target": "Temu alumni FTI UNAND lintas angkatan",
     "tanggalMulai": "2026-08-01",
@@ -1981,7 +2013,7 @@ export const PROGRAM_KERJA = [
     "id": "pk26",
     "nama": "FTI FutureLink",
     "dinasId": "eksternal",
-    "picId": "u29",
+    "picId": "u32",
     "deskripsi": "Program kerja FTI FutureLink oleh EKSTERNAL Kabinet Vismayakriya 2025/2026. Target: Jejaring industri & info magang dengan 15 perusahaan.",
     "target": "Jejaring industri & info magang dengan 15 perusahaan",
     "tanggalMulai": "2026-08-01",
@@ -2078,6 +2110,8 @@ export const PROGRAM_KERJA = [
     "nama": "Bakti FTI",
     "dinasId": "internal",
     "picId": "u39",
+    "picIds": ["u39", "u40"],
+    "picNama": "Muhammad Yusuf & Sasya Zamora",
     "deskripsi": "Program kerja Bakti FTI oleh INTERNAL Kabinet Vismayakriya 2025/2026. Target: Aksi pengabdian masyarakat terpadu keluarga besar FTI.",
     "target": "Aksi pengabdian masyarakat terpadu keluarga besar FTI",
     "tanggalMulai": "2026-08-01",
@@ -2125,7 +2159,9 @@ export const PROGRAM_KERJA = [
     "id": "pk29",
     "nama": "FTI Parade",
     "dinasId": "internal",
-    "picId": "u40",
+    "picId": "u42",
+    "picIds": ["u42", "u40"],
+    "picNama": "Muhammad Arief Nasril & Sasya Zamora",
     "deskripsi": "Program kerja FTI Parade oleh INTERNAL Kabinet Vismayakriya 2025/2026. Target: Pawai selebrasi dan pengenalan ormawa FTI.",
     "target": "Pawai selebrasi dan pengenalan ormawa FTI",
     "tanggalMulai": "2026-08-01",
@@ -2178,7 +2214,9 @@ export const PROGRAM_KERJA = [
     "id": "pk30",
     "nama": "InKor (Internal Koordinasi)",
     "dinasId": "internal",
-    "picId": "u41",
+    "picId": "u42",
+    "picIds": ["u42", "u40"],
+    "picNama": "Muhammad Arief Nasril & Sasya Zamora",
     "deskripsi": "Program kerja InKor (Internal Koordinasi) oleh INTERNAL Kabinet Vismayakriya 2025/2026. Target: Rapat sinergi bulanan seluruh dinas/biro Vismayakriya.",
     "target": "Rapat sinergi bulanan seluruh dinas/biro Vismayakriya",
     "tanggalMulai": "2026-08-01",
@@ -2226,7 +2264,9 @@ export const PROGRAM_KERJA = [
     "id": "pk31",
     "nama": "SaMawa (Sapa Ormawa)",
     "dinasId": "internal",
-    "picId": "u42",
+    "picId": "u41",
+    "picIds": ["u41", "u39"],
+    "picNama": "Ramadhani Amelia Putri & Muhammad Yusuf",
     "deskripsi": "Program kerja SaMawa (Sapa Ormawa) oleh INTERNAL Kabinet Vismayakriya 2025/2026. Target: Silaturahmi dan koordinasi ke seluruh Hima & UKM di FTI.",
     "target": "Silaturahmi dan koordinasi ke seluruh Hima & UKM di FTI",
     "tanggalMulai": "2026-08-01",
@@ -2274,7 +2314,9 @@ export const PROGRAM_KERJA = [
     "id": "pk32",
     "nama": "VisGo (Vismayakriya Goro)",
     "dinasId": "internal",
-    "picId": "u43",
+    "picId": "u38",
+    "picIds": ["u38", "u41"],
+    "picNama": "Siti Kayla Reyhana & Ramadhani Amelia Putri",
     "deskripsi": "Program kerja VisGo (Vismayakriya Goro) oleh INTERNAL Kabinet Vismayakriya 2025/2026. Target: Aksi gotong royong pemeliharaan sekretariat BEM.",
     "target": "Aksi gotong royong pemeliharaan sekretariat BEM",
     "tanggalMulai": "2026-08-01",
@@ -2314,7 +2356,7 @@ export const PROGRAM_KERJA = [
       {
         "tanggal": "2026-09-08",
         "isi": "Progress pelaksanaan VisGo (Vismayakriya Goro) berjalan sesuai rencana kerja unit.",
-        "author": "u43"
+        "author": "u38"
       }
     ]
   },
@@ -2322,7 +2364,9 @@ export const PROGRAM_KERJA = [
     "id": "pk33",
     "nama": "Kalender FTI",
     "dinasId": "internal",
-    "picId": "u36",
+    "picId": "u42",
+    "picIds": ["u42", "u40"],
+    "picNama": "Muhammad Arief Nasril & Sasya Zamora",
     "deskripsi": "Program kerja Kalender FTI oleh INTERNAL Kabinet Vismayakriya 2025/2026. Target: Penyusunan jadwal sinkronisasi seluruh agenda kegiatan FTI.",
     "target": "Penyusunan jadwal sinkronisasi seluruh agenda kegiatan FTI",
     "tanggalMulai": "2026-08-01",
@@ -2362,7 +2406,7 @@ export const PROGRAM_KERJA = [
       {
         "tanggal": "2026-09-08",
         "isi": "Progress pelaksanaan Kalender FTI berjalan sesuai rencana kerja unit.",
-        "author": "u36"
+        "author": "u42"
       }
     ]
   },
@@ -2370,7 +2414,9 @@ export const PROGRAM_KERJA = [
     "id": "pk34",
     "nama": "Graduation Needs",
     "dinasId": "internal",
-    "picId": "u37",
+    "picId": "u38",
+    "picIds": ["u38", "u39"],
+    "picNama": "Siti Kayla Reyhana & Muhammad Yusuf",
     "deskripsi": "Program kerja Graduation Needs oleh INTERNAL Kabinet Vismayakriya 2025/2026. Target: Apresiasi & penyambutan wisudawan FTI periode III & IV.",
     "target": "Apresiasi & penyambutan wisudawan FTI periode III & IV",
     "tanggalMulai": "2026-08-01",
@@ -2410,7 +2456,7 @@ export const PROGRAM_KERJA = [
       {
         "tanggal": "2026-09-08",
         "isi": "Progress pelaksanaan Graduation Needs berjalan sesuai rencana kerja unit.",
-        "author": "u37"
+        "author": "u38"
       }
     ]
   },
@@ -4554,7 +4600,7 @@ export const PENGAJUAN_DANA = [
     "status": "Ditolak",
     "catatan": "Pengajuan dana Temu Alumni FTI UNAND.",
     "tanggal": "2026-09-02",
-    "diajukanOleh": "u28",
+    "diajukanOleh": "u35",
     "disetujuiOleh": null,
     "tanggalDisetujui": null,
     "alasanDitolak": "RAB belum mencantumkan target kontribusi alumni dan detail sewa gedung belum ada penawaran resmi. Mohon revisi.",
@@ -4650,14 +4696,17 @@ export const RAPAT = [
     "waktu": "19:30",
     "lokasi": "Ruang Rapat Gedung BEM KM FTI Lt. 2",
     "agenda": "Evaluasi triwulan 1, sinkronisasi anggaran bersama Bendahara Daerah, dan persiapan FTI CUP 2026.",
-    "deskripsi": "Rapat koordinasi pimpinan tertinggi Kabinet Vismayakriya bersama Sekda dan Benda.",
+    "deskripsi": "Rapat koordinasi pimpinan tertinggi Kabinet Vismayakriya bersama Presidium.",
     "prokerId": "pk56",
     "dinasId": "sekda",
+    "isPresidium": true,
     "peserta": [
       "u1",
+      "u81",
       "u2",
       "u3",
-      "u36"
+      "u36",
+      "u35"
     ],
     "status": "upcoming",
     "hasil": null
@@ -4669,7 +4718,7 @@ export const RAPAT = [
     "waktu": "16:00",
     "lokasi": "Ruang Rapat Bersama FTI",
     "agenda": "Pemantapan kepanitiaan Bakti FTI, survei lokasi tahap akhir, dan koordinasi dengan Ormawa.",
-    "deskripsi": "Rapat internal Dinas Internal BEM KM FTI UNAND dipimpin oleh Kadis.",
+    "deskripsi": "Rapat internal Dinas Internal BEM KM FTI UNAND dipimpin oleh Kadin.",
     "prokerId": "pk28",
     "dinasId": "internal",
     "peserta": [
@@ -4781,13 +4830,17 @@ export const JADWAL_PIKET = [
     "id": "jp1",
     "tanggal": "2026-09-12",
     "jamMulai": "08:00",
+    "jamSelesai": "16:00",
+    "keterangan": "Jam Bebas (08.00 - 16.00 WIB)",
     "staffId": "u7",
     "status": "Selesai"
   },
   {
     "id": "jp2",
     "tanggal": "2026-09-12",
-    "jamMulai": "14:00",
+    "jamMulai": "08:00",
+    "jamSelesai": "16:00",
+    "keterangan": "Jam Bebas (08.00 - 16.00 WIB)",
     "staffId": "u8",
     "status": "Sedang Piket"
   },
@@ -4795,13 +4848,17 @@ export const JADWAL_PIKET = [
     "id": "jp3",
     "tanggal": "2026-09-13",
     "jamMulai": "08:00",
+    "jamSelesai": "16:00",
+    "keterangan": "Jam Bebas (08.00 - 16.00 WIB)",
     "staffId": "u9",
     "status": "Belum Mulai"
   },
   {
     "id": "jp4",
     "tanggal": "2026-09-13",
-    "jamMulai": "14:00",
+    "jamMulai": "08:00",
+    "jamSelesai": "16:00",
+    "keterangan": "Jam Bebas (08.00 - 16.00 WIB)",
     "staffId": "u10",
     "status": "Belum Mulai"
   },
@@ -4809,13 +4866,17 @@ export const JADWAL_PIKET = [
     "id": "jp5",
     "tanggal": "2026-09-14",
     "jamMulai": "08:00",
+    "jamSelesai": "16:00",
+    "keterangan": "Jam Bebas (08.00 - 16.00 WIB)",
     "staffId": "u11",
     "status": "Belum Mulai"
   },
   {
     "id": "jp6",
     "tanggal": "2026-09-14",
-    "jamMulai": "14:00",
+    "jamMulai": "08:00",
+    "jamSelesai": "16:00",
+    "keterangan": "Jam Bebas (08.00 - 16.00 WIB)",
     "staffId": "u15",
     "status": "Belum Mulai"
   },
@@ -4823,13 +4884,17 @@ export const JADWAL_PIKET = [
     "id": "jp7",
     "tanggal": "2026-09-15",
     "jamMulai": "08:00",
+    "jamSelesai": "16:00",
+    "keterangan": "Jam Bebas (08.00 - 16.00 WIB)",
     "staffId": "u16",
     "status": "Belum Mulai"
   },
   {
     "id": "jp8",
     "tanggal": "2026-09-15",
-    "jamMulai": "14:00",
+    "jamMulai": "08:00",
+    "jamSelesai": "16:00",
+    "keterangan": "Jam Bebas (08.00 - 16.00 WIB)",
     "staffId": "u17",
     "status": "Belum Mulai"
   },
@@ -4837,13 +4902,17 @@ export const JADWAL_PIKET = [
     "id": "jp9",
     "tanggal": "2026-09-16",
     "jamMulai": "08:00",
+    "jamSelesai": "16:00",
+    "keterangan": "Jam Bebas (08.00 - 16.00 WIB)",
     "staffId": "u18",
     "status": "Belum Mulai"
   },
   {
     "id": "jp10",
     "tanggal": "2026-09-16",
-    "jamMulai": "14:00",
+    "jamMulai": "08:00",
+    "jamSelesai": "16:00",
+    "keterangan": "Jam Bebas (08.00 - 16.00 WIB)",
     "staffId": "u19",
     "status": "Belum Mulai"
   }
@@ -4883,6 +4952,7 @@ export const NOTIFIKASI = [
   {
     "id": "n3",
     "tipe": "rapat",
+    "target": "presidium",
     "pesan": "Rapat Presidium & Pimpinan BEM Vismayakriya besok, 14 September 19:30 WIB",
     "waktu": "2026-09-12T07:00:00",
     "read": false,
@@ -4957,6 +5027,19 @@ export function formatDateTime(dateStr) {
   if (!dateStr) return '-';
   const date = new Date(dateStr);
   return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+
+export function getProkerPic(proker) {
+  if (!proker) return '-';
+  if (proker.picNama) return proker.picNama;
+  if (Array.isArray(proker.picIds) && proker.picIds.length > 0) {
+    return proker.picIds.map(id => getUserById(id)?.nama || id).join(' & ');
+  }
+  if (proker.picId) {
+    const u = getUserById(proker.picId);
+    return u ? u.nama : '-';
+  }
+  return '-';
 }
 
 export function formatTime(timeStr) {

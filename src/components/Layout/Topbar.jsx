@@ -16,8 +16,16 @@ const breadcrumbMap = {
 export default function Topbar({ onMenuToggle }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useAuth();
-  const { unreadNotifCount } = useApp();
+  const { user, isStaff } = useAuth();
+  const { notifikasi } = useApp();
+
+  const unreadNotifCount = notifikasi.filter(n => {
+    if (n.read) return false;
+    if (isStaff?.() && (n.target === 'presidium' || n.pesan?.toLowerCase().includes('presidium') || n.link?.includes('/rapat/r1'))) {
+      return false;
+    }
+    return true;
+  }).length;
 
   const pathParts = location.pathname.split('/').filter(Boolean);
   let breadcrumb = 'Dashboard';

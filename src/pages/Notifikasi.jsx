@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
+import { useAuth } from '../context/AuthContext';
 import {
   Bell, Wallet, FolderKanban, Users, ClipboardCheck, CheckCheck,
   BellRing, Filter, CheckCircle
@@ -15,7 +16,8 @@ const iconMap = {
 };
 
 export default function Notifikasi() {
-  const { notifikasi, markNotifRead, markAllNotifRead, unreadNotifCount } = useApp();
+  const { notifikasi, markNotifRead, markAllNotifRead } = useApp();
+  const { isStaff } = useAuth();
   const navigate = useNavigate();
   const [filterType, setFilterType] = useState('all');
 
@@ -41,9 +43,19 @@ export default function Notifikasi() {
     return `${days} hari lalu`;
   };
 
+  // Staff tidak mendapatkan pemberitahuan presidium
+  const visibleNotif = notifikasi.filter(n => {
+    if (isStaff() && (n.target === 'presidium' || n.pesan?.toLowerCase().includes('presidium') || n.link?.includes('/rapat/r1'))) {
+      return false;
+    }
+    return true;
+  });
+
+  const unreadCount = visibleNotif.filter(n => !n.read).length;
+
   const filteredNotif = filterType === 'all'
-    ? notifikasi
-    : notifikasi.filter(n => n.tipe === filterType);
+    ? visibleNotif
+    : visibleNotif.filter(n => n.tipe === filterType);
 
   return (
     <div className="page-container">
@@ -58,7 +70,7 @@ export default function Notifikasi() {
           </p>
         </div>
 
-        {unreadNotifCount > 0 && (
+        {unreadCount > 0 && (
           <button className="btn btn-secondary btn-sm" onClick={markAllNotifRead} style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
             <CheckCheck size={16} /> Tandai Semua Dibaca
           </button>

@@ -12,7 +12,7 @@ const DAYS = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
 const MONTHS = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
 export default function Kalender() {
-  const { user, isPimpinan, canManageCalendarEvent } = useAuth();
+  const { user, isPimpinan, isStaff, canManageCalendarEvent } = useAuth();
   const { programKerja, rapat, jadwalPiket, calendarEvents, addCalendarEvent, updateCalendarEvent, deleteCalendarEvent } = useApp();
 
   const [currentDate, setCurrentDate] = useState(new Date(2026, 8, 14)); // September 2026
@@ -74,6 +74,9 @@ export default function Kalender() {
     // Rapat (exclude if already tracked as calendarEvent)
     rapat?.forEach(r => {
       if (r.status !== 'dibatalkan' && r.tanggal === dateStr) {
+        if (isStaff?.() && (r.isPresidium || r.judul?.toLowerCase().includes('presidium') || r.dinasId === 'sekda')) {
+          return;
+        }
         const alreadyIn = events.some(e => e.id === 'ce-' + r.id || e.data?.referenceId === r.id);
         if (!alreadyIn) {
           events.push({
